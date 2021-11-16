@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:woody_app/widget/text_field.dart';
+import 'package:woody_app/widget/logo_image.dart';
+import 'package:woody_app/widget/paragraph.dart';
 
 import 'const.dart';
 import 'create_account_page.dart';

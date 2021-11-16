@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:woody_app/widget/paragraph.dart';
+import 'package:woody_app/widget/text_widget.dart';
+import 'const.dart';
 
-
-
-import 'package:woody_app/widget/text_field.dart';
-
-import 'const.dart';class Appointment extends StatefulWidget {
+class Appointment extends StatefulWidget {
   const Appointment({Key? key}) : super(key: key);
 
   @override

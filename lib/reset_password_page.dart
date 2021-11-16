@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:woody_app/vehicle_input_page.dart';
+import 'package:woody_app/widget/app_button.dart';
+import 'package:woody_app/widget/logo_image.dart';
+import 'package:woody_app/widget/text_form_widget.dart';
 
-import 'widget/text_field.dart';
+import 'widget/heading.dart';
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({Key? key}) : super(key: key);

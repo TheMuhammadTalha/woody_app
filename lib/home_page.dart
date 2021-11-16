@@ -1,6 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:woody_app/widget/text_field.dart';
+import 'package:woody_app/widget/medium_container.dart';
+import 'package:woody_app/widget/paragraph.dart';
+import 'package:woody_app/widget/top_bar.dart';
 
 import 'appointment_availability_page.dart';
 import 'const.dart';
@@ -30,7 +34,7 @@ class _HomePageState extends State<HomePage> {
                     label: 'What would you like to do?',
                     clr: primaryColor.withOpacity(0.6)),
               ),
-              MidContainer(
+              MediumContainer(
                 heading: 'Check appointment availability',
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => Appointment()));
