@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:woddy_app/const.dart';
-import 'package:woddy_app/widget/text_field.dart';
+import 'package:woody_app/widget/text_field.dart';
 
 import 'appointment_availability_page.dart';
+import 'const.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

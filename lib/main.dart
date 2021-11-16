@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:woddy_app/home_page.dart';
-import 'package:woddy_app/splash_screen.dart';
+import 'package:woody_app/splash_screen.dart';
 
 import 'appointment_availability_page.dart';
 

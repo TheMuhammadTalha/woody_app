@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:woddy_app/const.dart';
-import 'package:woddy_app/widget/text_field.dart';
-import 'package:woddy_app/reset_password_page.dart';
+import 'package:woody_app/reset_password_page.dart';
+import 'package:woody_app/widget/text_field.dart';
+
+import 'const.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({Key? key}) : super(key: key);

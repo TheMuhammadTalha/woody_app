@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:woddy_app/widget/text_field.dart';
+import 'package:woody_app/widget/text_field.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({Key? key}) : super(key: key);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:woddy_app/const.dart';
-import 'package:woddy_app/create_account_page.dart';
-import 'package:woddy_app/widget/text_field.dart';
+import 'package:woody_app/widget/text_field.dart';
 
+import 'const.dart';
+import 'create_account_page.dart';
 import 'login_page.dart';
 
 class SplashScreen extends StatelessWidget {

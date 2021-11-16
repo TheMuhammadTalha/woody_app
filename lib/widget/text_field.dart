@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:woddy_app/const.dart';
+import '../const.dart';
 
 class Heading extends StatelessWidget {
   final label;
