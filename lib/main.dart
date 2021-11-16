@@ -6,8 +6,9 @@ import 'appointment_availability_page.dart';
 
 void main() {
   runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
     theme: ThemeData(fontFamily: 'Lexend'),
+    debugShowCheckedModeBanner: false,
+    
     home: SplashScreen(),
     // home: HomePage(),
   ));
