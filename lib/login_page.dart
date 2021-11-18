@@ -36,9 +36,11 @@ class _LogInState extends State<LogIn> {
                   LogoImage(),
                   Heading(label: 'Log in'),
                   TextFormWidget(
+                    keyboard: TextInputType.emailAddress,
+
                     validator: (String? value) {
                       if (value!.isEmpty)
-                        return "Email is required";
+                        return "Invalid Email or password";
                       else
                         return null;
                     },
@@ -47,15 +49,16 @@ class _LogInState extends State<LogIn> {
                     controller: email,
                   ),
                   PasswordFormWidget(
-                    // validator: (String? value) {
-                    //   if (value!.isEmpty)
-                    //     return "Password required";
-                    //   else
-                    //     return null;
-                    // },
+                    passKeyboard: TextInputType.text,
                     hint: 'Password',
                     label: 'Password',
-                    controller: password, validator: (String? value) {},
+                    controller: password, validator: (String? value) {
+                    if (value!.isEmpty) {
+                      return "Invalid Email or password";
+                    } else {
+                      return null;
+                    }
+                  },
                   ),
                   GestureDetector(
                       onTap: () {

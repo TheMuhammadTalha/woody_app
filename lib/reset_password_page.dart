@@ -33,6 +33,9 @@ class _ResetPasswordState extends State<ResetPassword> {
                   LogoImage(),
                   Heading(label: 'Reset your password'),
                   TextFormWidget(
+                    keyboard: TextInputType.emailAddress,
+
+
                     validator: (String? value) {
                       if (value!.isEmpty)
                         return "Email is required";

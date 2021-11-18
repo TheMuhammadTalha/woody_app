@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import '../const.dart';
 
 class TextFormWidget extends StatelessWidget {
-  final hint, label, controller, validator;
+  final hint, label, controller, validator,keyboard;
 
   TextFormWidget(
       {Key? key,
         required this.hint,
         required this.label,
+        required this.keyboard,
         required this.validator,
         required this.controller})
       : super(key: key);
@@ -20,6 +21,7 @@ class TextFormWidget extends StatelessWidget {
       child: TextFormField(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         controller: controller,
+        keyboardType: keyboard,
         validator: validator,
         decoration: InputDecoration(
             focusedBorder:

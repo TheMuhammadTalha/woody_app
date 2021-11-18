@@ -5,6 +5,7 @@ import '../const.dart';
 class PasswordFormWidget extends StatefulWidget {
   String hint;
   String label;
+  TextInputType passKeyboard;
   TextEditingController controller;
 
   FormFieldValidator<String> validator;
@@ -13,6 +14,7 @@ class PasswordFormWidget extends StatefulWidget {
     Key? key,
     required this.hint,
     required this.label,
+    required this.passKeyboard,
     required this.validator,
     required this.controller,
   }) : super(key: key);
@@ -27,11 +29,13 @@ class _PasswordFormWidgetState extends State<PasswordFormWidget> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15.0),
       child: TextFormField(
+        keyboardType: widget.passKeyboard,
         obscureText: obscure,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         controller: widget.controller,
         validator: widget.validator,
         decoration: InputDecoration(
+
             focusedBorder:
             OutlineInputBorder(borderSide: BorderSide(color: primaryColor)),
             labelStyle: TextStyle(color: primaryColor),
@@ -44,7 +48,7 @@ class _PasswordFormWidgetState extends State<PasswordFormWidget> {
                   });
                 },
                 child:
-                obscure ? Icon(Icons.arrow_back) : Icon(Icons.visibility)),
+                obscure ? Icon(Icons.visibility) : Icon(Icons.visibility_off)),
             border:
             OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
       ),

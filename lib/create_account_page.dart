@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:woody_app/const.dart';
 import 'package:woody_app/widget/app_button.dart';
 import 'package:woody_app/widget/heading.dart';
 import 'package:woody_app/widget/logo_image.dart';
@@ -29,13 +30,14 @@ class _CreateAccountState extends State<CreateAccount> {
       child: SafeArea(
         child: Scaffold(
           body: SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 25.0,vertical: 15.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 LogoImage(),
                 Heading(label: 'Create an account'),
                 TextFormWidget(
+                  keyboard: TextInputType.text,
                   validator: (String? value) {
                     if (value!.isEmpty)
                       return "First name is required";
@@ -47,6 +49,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   controller: fName,
                 ),
                 TextFormWidget(
+                  keyboard: TextInputType.text,
                   validator: (String? value) {
                     if (value!.isEmpty)
                       return "Last name is required";
@@ -58,6 +61,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   controller: lName,
                 ),
                 TextFormWidget(
+                  keyboard: TextInputType.emailAddress,
                   validator: (String? value) {
                     if (value!.isEmpty)
                       return "email is required";
@@ -69,14 +73,13 @@ class _CreateAccountState extends State<CreateAccount> {
                   controller: email,
                 ),
                 TextFormWidget(
+                  keyboard: TextInputType.phone,
                   validator: (String? value) {
                     if (value!.isEmpty)
                       return "cell phone number is required";
-                    else if(value.length<4)
-                      {
-                        return null;
-                      }
-                    else
+                    else if (value.length < 11) {
+                      return "number must be greater than 11";
+                    } else
                       return null;
                   },
                   hint: 'Cell phone number',
@@ -84,16 +87,32 @@ class _CreateAccountState extends State<CreateAccount> {
                   controller: phone,
                 ),
                 PasswordFormWidget(
+                  passKeyboard: TextInputType.text,
                   hint: 'Password',
                   label: 'Password',
                   controller: password,
-                  validator: (String? value) {},
+                  validator: (String? value) {
+                    if (value!.isEmpty) {
+                      return "Password is required";
+                    } else if (value.length < 6) {
+                      return "Password must at-least 6 characters";
+                    } else {
+                      return null;
+                    }
+                  },
                 ),
                 PasswordFormWidget(
+                  passKeyboard: TextInputType.text,
                   hint: 'Confirm password',
                   label: 'Confirm password',
                   controller: confirmPassword,
-                  validator: (String? value) {},
+                  validator: (String? value) {
+                    if (password.text != confirmPassword.text) {
+                      return "Password does not match";
+                    } else {
+                      return null;
+                    }
+                  },
                 ),
                 AppButtonWidget(
                     onTap: () {
@@ -103,7 +122,31 @@ class _CreateAccountState extends State<CreateAccount> {
                         setState(() {});
                     },
                     label: 'Create Account'),
-                Text("By creating your account, you're agreeing to the"),
+                SizedBox(height: 10,),
+                RichText(
+                  textAlign: TextAlign.center,
+                    text: TextSpan(
+                        // style: DefaultTextStyle.of(context).style,
+                        children: [
+                      TextSpan(
+                          text:
+                              "By creating your account, you're \n agreeing to the",
+                          style: TextStyle(fontSize: 16, color: Colors.grey,fontFamily: 'Lexend')),
+                      TextSpan(
+                          text:
+                              " Terms and Conditions \n",
+                          style: TextStyle(fontSize: 16, color: primaryColor,fontFamily: 'Lexend')),
+                          TextSpan(
+                              text:
+                              "and",
+                              style: TextStyle(fontSize: 16, color: Colors.grey,fontFamily: 'Lexend')),
+                          TextSpan(
+                              text:
+                              " Privacy Policy",
+                              style: TextStyle(fontSize: 16, color: primaryColor,fontFamily: 'Lexend')),
+
+
+                        ]))
               ],
             ),
           ),

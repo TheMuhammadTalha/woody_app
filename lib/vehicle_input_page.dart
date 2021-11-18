@@ -40,6 +40,7 @@ class _VehicleInputState extends State<VehicleInput> {
                     clr: Colors.grey.shade600),
                 SizedBox(height: 30),
                 TextFormWidget(
+                  keyboard: TextInputType.text,
                   validator: (String? value) {
                     if (value!.isEmpty)
                       return "Year is required";
@@ -51,6 +52,7 @@ class _VehicleInputState extends State<VehicleInput> {
                   controller: year,
                 ),
                 TextFormWidget(
+                  keyboard: TextInputType.text,
                   validator: (String? value) {
                     if (value!.isEmpty)
                       return "Make is required";
@@ -62,6 +64,7 @@ class _VehicleInputState extends State<VehicleInput> {
                   controller: make,
                 ),
                 TextFormWidget(
+                  keyboard: TextInputType.text,
                   validator: (String? value) {
                     if (value!.isEmpty)
                       return "Model is required";
@@ -73,6 +76,7 @@ class _VehicleInputState extends State<VehicleInput> {
                   controller: model,
                 ),
                 TextFormWidget(
+                  keyboard: TextInputType.text,
                   validator: (String? value) {
                     if (value!.isEmpty)
                       return "VIN is required";
