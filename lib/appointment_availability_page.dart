@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:woody_app/widget/date_picker.dart';
 import 'package:woody_app/widget/paragraph.dart';
 import 'package:woody_app/widget/text_widget.dart';
 import 'const.dart';
@@ -60,7 +61,7 @@ class _AppointmentState extends State<Appointment>
                       borderRadius: BorderRadius.circular(30),
                       border: Border.all(color: primaryColor)),
                   child: Padding(
-                    padding: const EdgeInsets.all(2.0),
+                    padding: const EdgeInsets.all(3.0),
                     child: TabBar(
                       controller: _tabController,
                       unselectedLabelColor: primaryColor,
@@ -117,17 +118,16 @@ class _AppointmentState extends State<Appointment>
                         TextFormField(
                           maxLines: 5,
                           controller: controller,
-                          validator: (String? value) {
-                            if (value!.isEmpty)
-                              return "This field is required";
-                            else
-                              return null;
-                          },
                           decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: primaryColor)),
                               hintText: 'Start typing..',
                               border: OutlineInputBorder(
+                                  borderSide: BorderSide(width: 2),
                                   borderRadius: BorderRadius.circular(5.0))),
                         ),
+                        TextWidget(label: 'Preferred date & time'),
+                        DatePicker(),
                       ],
                     ),
                     Column(

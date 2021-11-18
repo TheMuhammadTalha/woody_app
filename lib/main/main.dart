@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:woody_app/home_page.dart';
 import 'package:woody_app/splash_screen.dart';
 
+import '../appointment_availability_page.dart';
+
 
 void main() {
   runApp(MaterialApp(
@@ -9,7 +11,7 @@ void main() {
     debugShowCheckedModeBanner: false,
     
     // home: SplashScreen(),
-    home: HomePage(),
+    home: Appointment(),
     // home: HomePage(),
   ));
 }
