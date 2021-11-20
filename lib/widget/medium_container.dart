@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../const.dart';
+import '../Screens/const.dart';
 
 class MediumContainer extends StatelessWidget {
   final heading, paragraph, onTap;

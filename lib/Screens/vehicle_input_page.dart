@@ -5,7 +5,7 @@ import 'package:woody_app/widget/paragraph.dart';
 import 'package:woody_app/widget/text_form_widget.dart';
 
 import 'home_page.dart';
-import 'widget/heading.dart';
+import '../widget/heading.dart';
 
 class VehicleInput extends StatefulWidget {
   const VehicleInput({Key? key}) : super(key: key);
@@ -91,11 +91,11 @@ class _VehicleInputState extends State<VehicleInput> {
                     onTap: () {
                       if (formKey.currentState!.validate()) {
                         print('validate');
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => HomePage()));
                       } else
                         setState(() {
-                          autoValidateMode = AutovalidateMode.always;
+
                         });
                     },
                     label: 'Complete'),

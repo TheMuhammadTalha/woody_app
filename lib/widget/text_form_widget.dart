@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../const.dart';
+import '../Screens/const.dart';
 
 class TextFormWidget extends StatelessWidget {
-  final hint, label, controller, validator,keyboard;
+  final String hint;
+      final String label;
+      TextEditingController controller;
+      FormFieldValidator<String?> validator;
+      TextInputType? keyboard;
 
   TextFormWidget(
       {Key? key,
         required this.hint,
         required this.label,
-        required this.keyboard,
+        this.keyboard,
         required this.validator,
         required this.controller})
       : super(key: key);

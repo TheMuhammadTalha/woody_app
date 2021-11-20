@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../const.dart';
+import '../Screens/const.dart';
 
 class AppButtonWidget extends StatelessWidget {
   final label, onTap;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:woody_app/Screens/const.dart';
 import 'package:woody_app/widget/logo_image.dart';
 import 'package:woody_app/widget/paragraph.dart';
 
-import 'const.dart';
 import 'create_account_page.dart';
 import 'login_page.dart';
 

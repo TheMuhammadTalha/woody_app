@@ -1,19 +1,40 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:woody_app/const.dart';
+import 'package:http/http.dart';
+import 'package:woody_app/Screens/const.dart';
+import 'package:http/http.dart' as http;
+import 'package:woody_app/Screens/vehicle_input_page.dart';
 import 'package:woody_app/widget/app_button.dart';
 import 'package:woody_app/widget/heading.dart';
 import 'package:woody_app/widget/logo_image.dart';
 import 'package:woody_app/widget/password_form_widget.dart';
 import 'package:woody_app/widget/text_form_widget.dart';
 
+import '../api_const_path/api_const.dart';
+import '../api_models/create_account_model.dart';
+
 class CreateAccount extends StatefulWidget {
   const CreateAccount({Key? key}) : super(key: key);
+
 
   @override
   _CreateAccountState createState() => _CreateAccountState();
 }
 
 class _CreateAccountState extends State<CreateAccount> {
+ @override
+  void initState() {
+   fName.text = 'talha1';
+   lName.text = 'talha1';
+   email.text= 'talha1@gmail.com';
+   password.text = '12345678';
+  phone.text = '123123123123';
+  confirmPassword.text = '12345678';
+
+    super.initState();
+  }
+
   var fName = TextEditingController();
   var lName = TextEditingController();
   var email = TextEditingController();
@@ -30,7 +51,8 @@ class _CreateAccountState extends State<CreateAccount> {
       child: SafeArea(
         child: Scaffold(
           body: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0,vertical: 15.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -115,37 +137,85 @@ class _CreateAccountState extends State<CreateAccount> {
                   },
                 ),
                 AppButtonWidget(
-                    onTap: () {
+                    onTap: () async {
                       if (formKey.currentState!.validate()) {
-                        print('validate');
+                        showDialog(
+                            context: context,
+                            builder: (ctx) {
+                              return AlertDialog(
+                                title: SizedBox(
+                                    height: 5,
+                                    width: 5,
+                                    child: CircularProgressIndicator()),
+                                content: Text("Creating Data..."),
+                              );
+                            });
+
+                        try {
+                          Response? res = await http.post(Uri.parse(registerPath),
+                              headers: <String, String>{
+                                'Content-Type':
+                                    'application/json; charset=UTF-8',
+                              },
+                                  body: jsonEncode(CreateAccountModel(
+                              firstName: fName.text,
+                                  lastName: lName.text,
+                                  email: email.text,
+                                  password: password.text,
+                                      phone: phone.text,
+                                      username: email.text)
+                                  .toJson()));
+                          Navigator.pop(context);
+                          if (res.statusCode == 406) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    'User with this email already exist')));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    'Account created')));
+                          }
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => VehicleInput()));
+                        } catch (e) {
+                        }
                       } else
                         setState(() {});
                     },
                     label: 'Create Account'),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 RichText(
-                  textAlign: TextAlign.center,
+                    textAlign: TextAlign.center,
                     text: TextSpan(
                         // style: DefaultTextStyle.of(context).style,
                         children: [
-                      TextSpan(
-                          text:
-                              "By creating your account, you're \n agreeing to the",
-                          style: TextStyle(fontSize: 16, color: Colors.grey,fontFamily: 'Lexend')),
-                      TextSpan(
-                          text:
-                              " Terms and Conditions \n",
-                          style: TextStyle(fontSize: 16, color: primaryColor,fontFamily: 'Lexend')),
                           TextSpan(
                               text:
-                              "and",
-                              style: TextStyle(fontSize: 16, color: Colors.grey,fontFamily: 'Lexend')),
+                                  "By creating your account, you're \n agreeing to the",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                  fontFamily: 'Lexend')),
                           TextSpan(
-                              text:
-                              " Privacy Policy",
-                              style: TextStyle(fontSize: 16, color: primaryColor,fontFamily: 'Lexend')),
-
-
+                              text: " Terms and Conditions \n",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: primaryColor,
+                                  fontFamily: 'Lexend')),
+                          TextSpan(
+                              text: "and",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                  fontFamily: 'Lexend')),
+                          TextSpan(
+                              text: " Privacy Policy",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: primaryColor,
+                                  fontFamily: 'Lexend')),
                         ]))
               ],
             ),

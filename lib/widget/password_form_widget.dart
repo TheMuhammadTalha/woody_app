@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../const.dart';
+import '../Screens/const.dart';
 
 class PasswordFormWidget extends StatefulWidget {
   String hint;
