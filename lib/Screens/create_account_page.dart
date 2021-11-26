@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:woody_app/Screens/const.dart';
@@ -15,22 +16,23 @@ import '../api_const_path/api_const.dart';
 import '../api_models/create_account_model.dart';
 
 class CreateAccount extends StatefulWidget {
-  const CreateAccount({Key? key}) : super(key: key);
+  static final pageName = '/create-account';
 
+  const CreateAccount({Key? key}) : super(key: key);
 
   @override
   _CreateAccountState createState() => _CreateAccountState();
 }
 
 class _CreateAccountState extends State<CreateAccount> {
- @override
+  @override
   void initState() {
-   fName.text = 'talha1';
-   lName.text = 'talha1';
-   email.text= 'talha1@gmail.com';
-   password.text = '12345678';
-  phone.text = '123123123123';
-  confirmPassword.text = '12345678';
+    fName.text = 'talha1';
+    lName.text = 'talha1';
+    email.text = 'talha1@gmail.com';
+    password.text = '12345678';
+    phone.text = '123123123123';
+    confirmPassword.text = '12345678';
 
     super.initState();
   }
@@ -143,25 +145,31 @@ class _CreateAccountState extends State<CreateAccount> {
                             context: context,
                             builder: (ctx) {
                               return AlertDialog(
-                                title: SizedBox(
-                                    height: 5,
-                                    width: 5,
-                                    child: CircularProgressIndicator()),
-                                content: Text("Creating Data..."),
+                                content: Column(mainAxisSize:MainAxisSize.min,
+                                  children: [
+
+                                    SizedBox(
+                                        height: 25,
+                                        width: 25,
+                                        child: CircularProgressIndicator()),
+                                    Text("Creating Data..."),
+                                  ],
+                                ),
                               );
                             });
 
                         try {
-                          Response? res = await http.post(Uri.parse(registerPath),
+                          Response? res = await http.post(
+                              Uri.parse(registerPath),
                               headers: <String, String>{
                                 'Content-Type':
                                     'application/json; charset=UTF-8',
                               },
-                                  body: jsonEncode(CreateAccountModel(
-                              firstName: fName.text,
-                                  lastName: lName.text,
-                                  email: email.text,
-                                  password: password.text,
+                              body: jsonEncode(CreateAccountModel(
+                                      firstName: fName.text,
+                                      lastName: lName.text,
+                                      email: email.text,
+                                      password: password.text,
                                       phone: phone.text,
                                       username: email.text)
                                   .toJson()));
@@ -171,14 +179,13 @@ class _CreateAccountState extends State<CreateAccount> {
                                 content: Text(
                                     'User with this email already exist')));
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(
-                                    'Account created')));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Account created')));
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => VehicleInput()));
                           }
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) => VehicleInput()));
-                        } catch (e) {
-                        }
+
+                        } catch (e) {}
                       } else
                         setState(() {});
                     },

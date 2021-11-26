@@ -1,11 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:woody_app/Screens/pageview_1.dart';
 import 'package:woody_app/widget/medium_container.dart';
 import 'package:woody_app/widget/paragraph.dart';
+import 'all_appointments_page.dart';
 import 'appointment_availability_page.dart';
 import 'const.dart';
+// import 'home-pageview-1.dart';
 
 class HomePage extends StatefulWidget {
+  // static final pageName = '/HomePage';
+
   const HomePage({Key? key}) : super(key: key);
 
   @override
@@ -13,7 +18,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int indexValue=0;
+  int currentIndex = 0;
+  final List<Widget> tabs = [
+    PageView1(),
+    AllAppointments(),
+    Center(child: Text('Page 1')),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +31,11 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0.0,
-          shape: RoundedRectangleBorder( borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(15),
-              bottomRight: Radius.circular(15)),),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15)),
+          ),
           // toolbarHeight: 100,
           title: Padding(
             padding: const EdgeInsets.only(top: 10.0),
@@ -37,92 +49,21 @@ class _HomePageState extends State<HomePage> {
             preferredSize: Size.fromHeight(70),
             child: Padding(
               padding: const EdgeInsets.only(bottom: 25.0),
-              child: Text(getPageTile(indexValue),style: TextStyle(color: Colors.white,
-                  fontSize: 30.0,fontWeight: FontWeight.bold)),
+              child: Text(getPageTile(currentIndex),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold)),
             ),
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: Paragraph(
-                      label: 'What would you like to do?',
-                      clr: primaryColor.withOpacity(0.6)),
-                ),
-                MediumContainer(
-                  heading: 'Check appointment availability',
-                  onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Appointment()));
-                  },
-                  paragraph:
-                      'Check availability to schedule a new service appointment',
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      border: Border.all(color: primaryColor, width: 2)),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15.0, horizontal: 18.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text('Call service',
-                                  style: TextStyle(
-                                      color: primaryColor,
-                                      fontSize: 17.0,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: Icon(
-                                Icons.call_rounded,
-                                color: primaryColor,
-                                size: 40.0,
-                              ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child:
-                                  Text('Speak with someone on our service team',
-                                      style: TextStyle(
-                                        color: primaryColor.withOpacity(0.5),
-                                        fontSize: 13.0,
-                                      )),
-                            ),
-                            Spacer(),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        body: tabs[currentIndex],
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: primaryColor,
           onTap: (value) {
-            indexValue = value;
+            currentIndex = value;
             print('$value');
-            setState(() {
-
-            });
+            setState(() {});
             // Respond to item press.
           },
           items: [
@@ -156,8 +97,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  String getPageTile(int pageIndex){
-    switch(pageIndex){
+  String getPageTile(int pageIndex) {
+    switch (pageIndex) {
       case 0:
         return "Service My Woody";
       case 1:
@@ -168,6 +109,6 @@ class _HomePageState extends State<HomePage> {
         return "Undefined index";
     }
   }
-
 }
 
+// String getTab()

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
-import 'package:woody_app/Screens/reset_password_page.dart';
+import 'package:woody_app/data.dart';
 import 'package:woody_app/widget/app_button.dart';
 import 'package:woody_app/widget/heading.dart';
 import 'package:woody_app/widget/logo_image.dart';
@@ -13,8 +13,12 @@ import 'package:woody_app/widget/text_form_widget.dart';
 import '../api_const_path/api_const.dart';
 import '../api_models/login_model.dart';
 import 'const.dart';
+import 'home_page.dart';
+
+String?  token;
 
 class LogIn extends StatefulWidget {
+  // static final pageName='/login';
   const LogIn({Key? key}) : super(key: key);
 
   @override
@@ -25,6 +29,7 @@ class _LogInState extends State<LogIn> {
   var email = TextEditingController();
   var password = TextEditingController();
   var formKey = GlobalKey<FormState>();
+
   AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
 
   @override
@@ -43,7 +48,6 @@ class _LogInState extends State<LogIn> {
                   Heading(label: 'Log in'),
                   TextFormWidget(
                     keyboard: TextInputType.emailAddress,
-
                     validator: (String? value) {
                       if (value!.isEmpty)
                         return "Invalid Email or password";
@@ -58,20 +62,21 @@ class _LogInState extends State<LogIn> {
                     passKeyboard: TextInputType.text,
                     hint: 'Password',
                     label: 'Password',
-                    controller: password, validator: (String? value) {
-                    if (value!.isEmpty) {
-                      return "Invalid Email or password";
-                    } else {
-                      return null;
-                    }
-                  },
+                    controller: password,
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return "Invalid Email or password";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                   GestureDetector(
                       onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ResetPassword()));
+                            builder: (context) => HomePage()));
                       },
                       child: Text(
                         'Forgot Password?',
@@ -89,37 +94,26 @@ class _LogInState extends State<LogIn> {
                                       height: 5,
                                       width: 5,
                                       child: CircularProgressIndicator()),
-                                  content: Text("Creating Data..."),
+                                  content: Text("Logging in..."),
                                 );
                               });
                           try {
-                            Response? res = await http.post(Uri.parse(loginPath),
+                            Response? res = await http.post(
+                                Uri.parse(loginPath),
                                 headers: <String, String>{
                                   'Content-Type':
-                                  'application/json; charset=UTF-8',
+                                      'application/json; charset=UTF-8',
                                 },
                                 body: jsonEncode(LoginModel(
-                                    username: email.text,
-                                    password: password.text)
-
+                                        username: email.text,
+                                        password: password.text)
                                     .toJson()));
+                            AppData().setAccessToken(res.body);
                             Navigator.pop(context);
-                            if (res.statusCode == 406) {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  content: Text(
-                                      'User with this email already exist')));
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  content: Text(
-                                      'Account created')));
-                            }
-                            // Navigator.of(context).push(
-                            //     MaterialPageRoute(builder: (context) => VehicleInput()));
-                          } catch (e) {
-                          }
+                            print(token);
+                          } catch (e) {}
                         } else {
-                          setState(() {
-                          });
+                          setState(() {});
                         }
                       },
                       label: 'Sign in'),

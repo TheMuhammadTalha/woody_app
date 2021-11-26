@@ -21,7 +21,7 @@ class _DatePickerState extends State<DatePicker> {
             height: 60,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                border: Border.all(width: 2, color: primaryColor)),
+                border: Border.all(color: primaryColor)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Row(
@@ -31,14 +31,14 @@ class _DatePickerState extends State<DatePicker> {
                       ? Text(
                     '${selectedDate!.day} - ${selectedDate!.month} - ${selectedDate!.year}',
                     style: TextStyle(
-                        color: primaryColor,
+                        color: primaryColor.withOpacity(0.6),
                         fontSize: 15,
-                        fontWeight: FontWeight.bold),
+                        ),
                   )
                       : Text(
                     'Select date',
                     style: TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.bold,color: primaryColor),
+                        fontSize: 15,color: primaryColor.withOpacity(0.6)),
                   ),
                   GestureDetector(
                       onTap: () async {
