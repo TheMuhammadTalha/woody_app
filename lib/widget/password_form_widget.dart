@@ -48,7 +48,7 @@ class _PasswordFormWidgetState extends State<PasswordFormWidget> {
                   });
                 },
                 child:
-                obscure ? Icon(Icons.visibility) : Icon(Icons.visibility_off)),
+                obscure ? Icon(Icons.visibility_off) : Icon(Icons.visibility)),
             border:
             OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
       ),

@@ -45,6 +45,14 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           centerTitle: true,
+          actions: [
+            currentIndex == 2
+                ? GestureDetector(onTap: () {}, child: Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: Center(child: Text('Sign out')),
+                ))
+                : Text('')
+          ],
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(70),
             child: Padding(

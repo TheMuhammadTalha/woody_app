@@ -11,6 +11,7 @@ class CreateAccountModel {
   String password;
   String phone;
   String username;
+  String role;
 
   CreateAccountModel(
       {required this.firstName,
@@ -18,6 +19,7 @@ class CreateAccountModel {
       required this.email,
       required this.password,
       required this.phone,
+      required this.role,
       required this.username});
 
   factory CreateAccountModel.fromJson(Map<String, dynamic> json) =>

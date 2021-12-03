@@ -6,6 +6,8 @@ import 'package:http/http.dart';
 import 'package:woody_app/Screens/const.dart';
 import 'package:http/http.dart' as http;
 import 'package:woody_app/Screens/vehicle_input_page.dart';
+import 'package:woody_app/api_models/login_model.dart';
+import 'package:woody_app/demo/api_service.dart';
 import 'package:woody_app/widget/app_button.dart';
 import 'package:woody_app/widget/heading.dart';
 import 'package:woody_app/widget/logo_image.dart';
@@ -145,47 +147,45 @@ class _CreateAccountState extends State<CreateAccount> {
                             context: context,
                             builder: (ctx) {
                               return AlertDialog(
-                                content: Column(mainAxisSize:MainAxisSize.min,
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
-
                                     SizedBox(
                                         height: 25,
                                         width: 25,
                                         child: CircularProgressIndicator()),
-                                    Text("Creating Data..."),
+                                    Text("Creating Account..."),
                                   ],
                                 ),
                               );
                             });
+                        await APIService().post(
+                            context,
+                            'person',
+                            CreateAccountModel(
+                              username: email.text,
+                              firstName: fName.text,
+                              lastName: lName.text,
+                              email: email.text,
+                              password: password.text,
+                              phone: phone.text,
+                              role: '0',
+                            ).toJson());
 
-                        try {
-                          Response? res = await http.post(
-                              Uri.parse(registerPath),
-                              headers: <String, String>{
-                                'Content-Type':
-                                    'application/json; charset=UTF-8',
-                              },
-                              body: jsonEncode(CreateAccountModel(
-                                      firstName: fName.text,
-                                      lastName: lName.text,
-                                      email: email.text,
-                                      password: password.text,
-                                      phone: phone.text,
-                                      username: email.text)
-                                  .toJson()));
-                          Navigator.pop(context);
-                          if (res.statusCode == 406) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(
-                                    'User with this email already exist')));
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Account created')));
+                        var token = await APIService().post(
+                            context,
+                            'auth/sign-in',
+                            LoginModel(
+                                    username: email.text,
+                                    password: password.text)
+                                .toJson());
+                        print(token['access_token']);
+                        await APIService()
+                            .setAccessToken(token['access_token']);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => VehicleInput()));
-                          }
-
-                        } catch (e) {}
                       } else
                         setState(() {});
                     },

@@ -13,6 +13,7 @@ CreateAccountModel _$CreateAccountModelFromJson(Map<String, dynamic> json) {
     email: json['email'] as String,
     password: json['password'] as String,
     phone: json['phone'] as String,
+    role: json['role'] as String,
     username: json['username'] as String,
   );
 }
@@ -25,4 +26,5 @@ Map<String, dynamic> _$CreateAccountModelToJson(CreateAccountModel instance) =>
       'password': instance.password,
       'phone': instance.phone,
       'username': instance.username,
+      'role': instance.role,
     };

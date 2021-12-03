@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class APIService {
-  final apiUrl ='https://my-woody.herokuapp.com';
+  final apiUrl ='http://46.101.81.185:9200';
 
   Future<Map<String,String>> getHeaders () async {
     String? token = await getAccessToken();

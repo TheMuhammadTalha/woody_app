@@ -90,11 +90,16 @@ class _LogInState extends State<LogIn> {
                               context: context,
                               builder: (ctx) {
                                 return AlertDialog(
-                                  title: SizedBox(
-                                      height: 5,
-                                      width: 5,
-                                      child: CircularProgressIndicator()),
-                                  content: Text("Logging in..."),
+                                  content: Column(mainAxisSize:MainAxisSize.min,
+                                    children: [
+
+                                      SizedBox(
+                                          height: 25,
+                                          width: 25,
+                                          child: CircularProgressIndicator()),
+                                      Text("Logging In..."),
+                                    ],
+                                  ),
                                 );
                               });
                           try {
@@ -110,7 +115,8 @@ class _LogInState extends State<LogIn> {
                                     .toJson()));
                             AppData().setAccessToken(res.body);
                             Navigator.pop(context);
-                            print(token);
+                            print(res.body);
+
                           } catch (e) {}
                         } else {
                           setState(() {});
