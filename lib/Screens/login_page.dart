@@ -1,16 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:http/http.dart' as http;
-import 'package:woody_app/data.dart';
+import 'package:woody_app/demo/api_service.dart';
 import 'package:woody_app/widget/app_button.dart';
 import 'package:woody_app/widget/heading.dart';
 import 'package:woody_app/widget/logo_image.dart';
 import 'package:woody_app/widget/password_form_widget.dart';
 import 'package:woody_app/widget/text_form_widget.dart';
-
-import '../api_const_path/api_const.dart';
 import '../api_models/login_model.dart';
 import 'const.dart';
 import 'home_page.dart';
@@ -31,7 +25,13 @@ class _LogInState extends State<LogIn> {
   var formKey = GlobalKey<FormState>();
 
   AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
+@override
+  void initState() {
+    super.initState();
+    email.text = 'talha53@gmail.com';
+    password.text = '12345678';
 
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -102,22 +102,25 @@ class _LogInState extends State<LogIn> {
                                   ),
                                 );
                               });
-                          try {
-                            Response? res = await http.post(
-                                Uri.parse(loginPath),
-                                headers: <String, String>{
-                                  'Content-Type':
-                                      'application/json; charset=UTF-8',
-                                },
-                                body: jsonEncode(LoginModel(
-                                        username: email.text,
-                                        password: password.text)
-                                    .toJson()));
-                            AppData().setAccessToken(res.body);
-                            Navigator.pop(context);
-                            print(res.body);
+                            var token = await APIService().post(
+                                context,
+                                'auth/sign-in',
+                                LoginModel(
+                                    username: email.text,
+                                    password: password.text)
+                                    .toJson());
 
-                          } catch (e) {}
+                            await APIService()
+                                .setAccessToken(token['access_token']);
+                            var person = await APIService().getOne(context, 'auth/profile');
+                            await APIService().setPersonID(person['_id']);
+
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => HomePage()));
+
+
                         } else {
                           setState(() {});
                         }

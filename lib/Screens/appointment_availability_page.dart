@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:woody_app/api_models/appointment-model.dart';
+import 'package:woody_app/api_models/time-slot_model.dart';
+import 'package:woody_app/api_models/vehicle_model.dart';
+import 'package:woody_app/demo/api_service.dart';
 import 'package:woody_app/widget/app_button.dart';
 import 'package:woody_app/widget/date_picker.dart';
 import 'package:woody_app/widget/paragraph.dart';
@@ -23,19 +27,14 @@ class _AppointmentState extends State<Appointment>
   TabController? _tabController;
   String? serviceType;
   List<String> category = ['Oil Change', 'Tunning'];
-  String? timeRange;
-  List<String> range = [
-    '9:00 AM - 10:00 AM',
-    '10:00 AM - 11:00 AM',
-    '11:00 AM - 12:00 PM',
-    '12:00 PM - 1:00 PM',
-    '1:00 PM - 2:00 PM',
-    '2:00 PM - 3:00 PM',
-    '3:00 PM - 4:00 PM',
-    '4:00 PM - 5:00 PM',
-    '5:00 PM - 6:00 PM',
-    '6:00 PM - 7:00 PM'
-  ];
+
+  VehicleModel? selectedCar;
+  var cars = <VehicleModel>[];
+
+  TimeSlotModel? selectedTimeRange;
+  var timeRange = <TimeSlotModel>[];
+
+  List<String> range = [];
   DateTime? selectedDate;
   String? formattedDate;
   var descriptionController = TextEditingController();
@@ -50,6 +49,30 @@ class _AppointmentState extends State<Appointment>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _fetchCars();
+    _fetchTimeRange();
+  }
+
+  void _fetchCars() async {
+    try {
+      cars = (await APIService().getAll('vehicle'))
+          .map<VehicleModel>((e) => VehicleModel.fromJson(e))
+          .toList();
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _fetchTimeRange() async {
+    try {
+      timeRange = (await APIService().getAll('time-slot'))
+          .map((e) => TimeSlotModel.fromJson(e))
+          .toList();
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -86,6 +109,7 @@ class _AppointmentState extends State<Appointment>
                       label: 'Appointment type',
                       clr: primaryColor.withOpacity(0.6)),
                 ),
+
                 Container(
                     height: 50,
                     decoration: BoxDecoration(
@@ -143,26 +167,65 @@ class _AppointmentState extends State<Appointment>
                                     },
                                     value: serviceType,
                                     items: category
-                                        .map((e) =>
-                                        DropdownMenuItem(
+                                        .map((e) => DropdownMenuItem(
                                             child: Text(e), value: e))
                                         .toList()),
                               ),
                             ),
                             TextWidget(
                                 label:
-                                'Provide a brief description of your issue'),
+                                    'Provide a brief description of your issue'),
                             TextFormField(
                               maxLines: 5,
                               controller: descriptionController,
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                     borderSide:
-                                    BorderSide(color: primaryColor)),
+                                        BorderSide(color: primaryColor)),
                                 hintText: 'Start typing..',
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: primaryColor),
                                 ),
+                              ),
+                            ),
+                            TextWidget(
+                                label: 'Which Car do you want to get served?'),
+                            Container(
+                              height: 60,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: primaryColor)),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0, vertical: 10),
+                                child: DropdownButton<VehicleModel>(
+                                    underline: SizedBox(height: 0),
+                                    icon: Icon(Icons.keyboard_arrow_down,
+                                        color: primaryColor.withOpacity(0.6)),
+                                    iconSize: 25,
+                                    style: TextStyle(
+                                        fontSize: 15, color: Colors.black),
+                                    isExpanded: true,
+                                    hint: Text(
+                                      'Select Car',
+                                      style: TextStyle(
+                                          color: primaryColor.withOpacity(0.6),
+                                          fontFamily: 'Lexend'),
+                                    ),
+                                    onChanged: (VehicleModel? value) {
+                                      selectedCar = value;
+                                      setState(() {});
+                                      print(selectedCar);
+                                    },
+                                    value: selectedCar,
+                                    items: cars
+                                        .map(
+                                          (e) => DropdownMenuItem<VehicleModel>(
+                                            child: Text('${e.model} ${e.year}'),
+                                            value: e,
+                                          ),
+                                        )
+                                        .toList()),
                               ),
                             ),
                             TextWidget(label: 'Preferred date & time'),
@@ -173,44 +236,49 @@ class _AppointmentState extends State<Appointment>
                                     height: 60,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(5),
-                                        border: Border.all(
-                                            color: primaryColor)),
+                                        border:
+                                            Border.all(color: primaryColor)),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10.0),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           (selectedDate != null)
                                               ? Text(
-                                          '$formattedDate',
-                                            style: TextStyle(
-                                              color: primaryColor.withOpacity(
-                                                  0.6),
-                                              fontSize: 15,
-                                            ),
-                                          )
+                                                  '$formattedDate',
+                                                  style: TextStyle(
+                                                    color: primaryColor
+                                                        .withOpacity(0.6),
+                                                    fontSize: 15,
+                                                  ),
+                                                )
                                               : Text(
-                                            'Select date',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: primaryColor.withOpacity(
-                                                    0.6)),
-                                          ),
+                                                  'Select date',
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: primaryColor
+                                                          .withOpacity(0.6)),
+                                                ),
                                           GestureDetector(
                                               onTap: () async {
-                                                DateTime? date = await showDatePicker(
-                                                    context: context,
-                                                    initialDate: selectedDate ??
-                                                        DateTime.now(),
-                                                    firstDate: DateTime.now(),
-                                                    lastDate: DateTime((DateTime
-                                                        .now()
-                                                        .year + 50)));
+                                                DateTime? date =
+                                                    await showDatePicker(
+                                                        context: context,
+                                                        initialDate:
+                                                            selectedDate ??
+                                                                DateTime.now(),
+                                                        firstDate:
+                                                            DateTime.now(),
+                                                        lastDate: DateTime(
+                                                            (DateTime.now()
+                                                                    .year +
+                                                                50)));
                                                 if (date != null)
                                                   selectedDate = date;
-                                                formattedDate = Jiffy(selectedDate).yMMMMd;
+                                                formattedDate =
+                                                    Jiffy(selectedDate).yMMMMd;
                                                 setState(() {});
                                                 print(formattedDate);
                                               },
@@ -250,16 +318,16 @@ class _AppointmentState extends State<Appointment>
                                       style: TextStyle(
                                           color: primaryColor.withOpacity(0.6)),
                                     ),
-                                    onChanged: (String? value) {
-                                      timeRange = value;
+                                    onChanged: (TimeSlotModel? value) {
+                                      selectedTimeRange = value!;
                                       setState(() {});
-                                      print(timeRange);
+                                      print(selectedTimeRange);
                                     },
-                                    value: timeRange,
-                                    items: range
-                                        .map((e) =>
-                                        DropdownMenuItem(
-                                            child: Text(e), value: e))
+                                    value: selectedTimeRange,
+                                    items: timeRange
+                                        .map((e) => DropdownMenuItem(
+                                            child: Text('${e.to}-${e.from}'),
+                                            value: e))
                                         .toList()),
                               ),
                             ),
@@ -313,36 +381,38 @@ class _AppointmentState extends State<Appointment>
                                 controller: zipCodeController),
                             Padding(
                               padding:
-                              const EdgeInsets.symmetric(vertical: 8.0),
+                                  const EdgeInsets.symmetric(vertical: 8.0),
                               child: AppButtonWidget(
-                                  label: 'View Summary',
-                                  onTap: () {
-                                    if (formKey.currentState!.validate()) {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AppointmentDetails(
-                                                    detail: Details(
-                                                        address:
-                                                        addressLine1Controller
-                                                            .text,
-                                                        date
-                                                        :formattedDate!,
-                                                        serviceType:
-                                                        serviceType!,
-                                                        timeRange: timeRange!,
-                                                        city: cityController
-                                                            .text,
-                                                        state: stateController
-                                                            .text,
-                                                        zip: zipCodeController
-                                                            .text
-                                                    ),
-                                                  )));
-                                      return print('Validate');
-                                    }
-                                  }),
+                                label: 'View Summary',
+                                onTap: () {
+                                  if (formKey.currentState!.validate()) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            AppointmentDetails(
+                                          detail: AppointmentModel(
+                                            address:
+                                                addressLine1Controller.text,
+                                            date: selectedDate!,
+                                            service:0,
+                                            timeSlot: selectedTimeRange,
+                                            city: cityController.text,
+                                            state: stateController.text,
+                                            zip: zipCodeController.text,
+                                            vehicle: selectedCar,
+                                            personID: '',
+                                            description: '',
+                                            status: 0,
+                                            type: 0,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                    return print('Validate');
+                                  }
+                                },
+                              ),
                             )
                           ],
                         ),
@@ -381,22 +451,21 @@ class _AppointmentState extends State<Appointment>
                                     },
                                     value: serviceType,
                                     items: category
-                                        .map((e) =>
-                                        DropdownMenuItem(
+                                        .map((e) => DropdownMenuItem(
                                             child: Text(e), value: e))
                                         .toList()),
                               ),
                             ),
                             TextWidget(
                                 label:
-                                'Provide a brief description of your issue'),
+                                    'Provide a brief description of your issue'),
                             TextFormField(
                               maxLines: 5,
                               controller: descriptionController,
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                     borderSide:
-                                    BorderSide(color: primaryColor)),
+                                        BorderSide(color: primaryColor)),
                                 hintText: 'Start typing..',
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: primaryColor),
@@ -430,22 +499,22 @@ class _AppointmentState extends State<Appointment>
                                       style: TextStyle(
                                           color: primaryColor.withOpacity(0.6)),
                                     ),
-                                    onChanged: (String? value) {
-                                      timeRange = value;
+                                    onChanged: (TimeSlotModel? value) {
+                                      selectedTimeRange = value!;
                                       setState(() {});
                                       print(timeRange);
                                     },
-                                    value: timeRange,
-                                    items: range
-                                        .map((e) =>
-                                        DropdownMenuItem(
-                                            child: Text(e), value: e))
+                                    value: selectedTimeRange,
+                                    items: timeRange
+                                        .map((e) => DropdownMenuItem(
+                                            child: Text('${e.to}-${e.from}'),
+                                            value: e))
                                         .toList()),
                               ),
                             ),
                             Padding(
                               padding:
-                              const EdgeInsets.symmetric(vertical: 8.0),
+                                  const EdgeInsets.symmetric(vertical: 8.0),
                               child: AppButtonWidget(
                                   label: 'View 2nd Summary',
                                   onTap: () {

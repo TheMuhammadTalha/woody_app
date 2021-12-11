@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:woody_app/Screens/const.dart';
-import 'package:woody_app/widget/heading.dart';
 import 'package:woody_app/widget/medium_container.dart';
-import 'package:woody_app/widget/paragraph.dart';
-
-import 'all_appointments_page.dart';
 
 class ThanksPage extends StatelessWidget {
   const ThanksPage({Key? key}) : super(key: key);

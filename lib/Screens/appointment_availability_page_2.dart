@@ -1,31 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:woody_app/Screens/thank_you_Page.dart';
+import 'package:woody_app/api_models/appointment-model.dart';
+import 'package:woody_app/demo/api_service.dart';
 import 'package:woody_app/widget/app_button.dart';
+import 'all_appointments_page.dart';
 import 'const.dart';
 
-class Details {
-  String serviceType;
-  String date;
-  String address;
-  String timeRange;
-  String city;
-  String state;
-  String zip;
-
-  Details({
-    required this.serviceType,
-    required this.date,
-    required this.address,
-    required this.timeRange,
-    required this.city,
-    required this.state,
-    required this.zip,
-  });
-}
-
 class AppointmentDetails extends StatefulWidget {
-  final Details detail;
+  final AppointmentModel detail;
 
   // static final pageName = '/AppointmentDetails';
 
@@ -34,7 +19,9 @@ class AppointmentDetails extends StatefulWidget {
   @override
   _AppointmentDetailsState createState() => _AppointmentDetailsState();
 }
-
+// String getDate(date){
+//   return Jiffy(date).yMMMMd;
+// }
 class _AppointmentDetailsState extends State<AppointmentDetails> {
   @override
   Widget build(BuildContext context) {
@@ -88,7 +75,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                       fontSize: 15.0,
-                                      color: Color(0xff133a7c).withOpacity(0.6))),
+                                      color:
+                                          Color(0xff133a7c).withOpacity(0.6))),
                             ),
                             GestureDetector(
                               onTap: () {},
@@ -113,7 +101,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                   fontSize: 15.0,
                                   color: Color(0xff133a7c).withOpacity(0.6))),
                         ),
-                        Text(widget.detail.serviceType,
+                        Text(widget.detail.service.toString(),
                             style: TextStyle(
                                 color: primaryColor,
                                 fontWeight: FontWeight.bold,
@@ -126,7 +114,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                   fontSize: 15.0,
                                   color: Color(0xff133a7c).withOpacity(0.6))),
                         ),
-                        Text(widget.detail.date,
+                        Text(widget.detail.date.toIso8601String(),
                             style: TextStyle(
                                 color: primaryColor,
                                 fontWeight: FontWeight.bold,
@@ -139,7 +127,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                   fontSize: 15.0,
                                   color: Color(0xff133a7c).withOpacity(0.6))),
                         ),
-                        Text(widget.detail.timeRange,
+                        Text(
+                            '${widget.detail.timeSlot!.to}PM-${widget.detail.timeSlot!.from}PM',
                             style: TextStyle(
                                 color: primaryColor,
                                 fontWeight: FontWeight.bold,
@@ -171,12 +160,45 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
               ),
               SizedBox(height: 50),
               AppButtonWidget(
-                  label: 'Submit appointment request', onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ThanksPage()));
-              })
+                  label: 'Submit appointment request',
+                  onTap: () async {
+                    final _personId=await APIService().getPersonID();
+                    print(jsonEncode(AppointmentModel(
+                        status: 0,
+                        personID: _personId,
+                        type: 0,
+                        service: 0,
+                        description: 'abc',
+                        date: widget.detail.date,
+                        timeSlot: widget.detail.timeSlot,
+                        address: widget.detail.address,
+                        city: widget.detail.city,
+                        state: widget.detail.state,
+                        zip: widget.detail.zip,
+                        vehicle: widget.detail.vehicle)
+                        .toJson()));
+
+                    await APIService().specialPostCase(
+                        context,
+                        'appointment',
+                        AppointmentModel(
+                                status: 0,
+                                personID: _personId,
+                                type: 0,
+                                service: 0,
+                                description: 'description',
+                                date: widget.detail.date,
+                                timeSlot: widget.detail.timeSlot,
+                                address: widget.detail.address,
+                                city: widget.detail.city,
+                                state: widget.detail.state,
+                                zip: widget.detail.zip,
+                                vehicle: widget.detail.vehicle)
+                            .toJson());
+                   print("Successfully created Appointment");
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AllAppointments()));
+                  })
             ],
           ),
         ),

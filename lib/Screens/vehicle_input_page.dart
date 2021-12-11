@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:woody_app/api_models/vehicle_model.dart';
+import 'package:woody_app/demo/api_service.dart';
 import 'package:woody_app/widget/app_button.dart';
 import 'package:woody_app/widget/logo_image.dart';
 import 'package:woody_app/widget/paragraph.dart';
@@ -88,15 +90,37 @@ class _VehicleInputState extends State<VehicleInput> {
                   controller: vin,
                 ),
                 AppButtonWidget(
-                    onTap: () {
+                    onTap: () async {
                       if (formKey.currentState!.validate()) {
-                        print('validate');
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => HomePage()));
+                        showDialog(
+                            context: context,
+                            builder: (ctx) {
+                              return AlertDialog(
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                        height: 25,
+                                        width: 25,
+                                        child: CircularProgressIndicator()),
+                                    Text("Adding Vehicle..."),
+                                  ],
+                                ),
+                              );
+                            });
+                        var id =await APIService().getPersonID();
+                        await APIService().post(context, 'vehicle',
+                            VehicleModel(personID:id!, year: year.text,
+                            make: make.text,
+                            model: model.text,
+                            vin: vin.text).toJson());
+                        Navigator.pop(context);
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => HomePage()));
                       } else
-                        setState(() {
+                      setState(() {
 
-                        });
+                      });
                     },
                     label: 'Complete'),
               ],

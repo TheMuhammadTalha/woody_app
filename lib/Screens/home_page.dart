@@ -1,12 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:woody_app/Screens/pageview_1.dart';
-import 'package:woody_app/widget/medium_container.dart';
-import 'package:woody_app/widget/paragraph.dart';
+import 'package:woody_app/demo/api_service.dart';
 import 'all_appointments_page.dart';
-import 'appointment_availability_page.dart';
 import 'const.dart';
-// import 'home-pageview-1.dart';
 
 class HomePage extends StatefulWidget {
   // static final pageName = '/HomePage';
@@ -25,12 +22,19 @@ class _HomePageState extends State<HomePage> {
     Center(child: Text('Page 1')),
   ];
 
+  void _p() async {
+    print(await APIService().getAccessToken());
+    print(await APIService().getPersonID());
+  }
+
   @override
   Widget build(BuildContext context) {
+    _p();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           elevation: 0.0,
+
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(15),

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:woody_app/Screens/appointment_availability_page.dart';
-import 'package:woody_app/Screens/appointment_availability_page_2.dart';
-import 'package:woody_app/Screens/create_account_page.dart';
-import 'package:woody_app/Screens/login_page.dart';
+import 'package:woody_app/Screens/home_page.dart';
 import 'package:woody_app/Screens/splash_screen.dart';
 import 'package:woody_app/data.dart';
-import '../Screens/home_page.dart';
+import 'package:woody_app/demo/api_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final _id = await APIService().getPersonID();
   await AppData.initialize();
   runApp(MaterialApp(
     theme: ThemeData(
@@ -24,7 +22,8 @@ void main() async {
     //   Appointment.pageName: (context) => Appointment(),
     //   AppointmentDetails.pageName: (context) => AppointmentDetails(),
     // },
-    home: SplashScreen(),
+    // home: SplashScreen(),
+    home:( _id?.isNotEmpty ?? false )? HomePage() : SplashScreen(),
     // home: Appointment(),
     // home: HomePage(),
     // home: AppointmentDetails(),

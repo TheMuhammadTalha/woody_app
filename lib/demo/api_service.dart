@@ -25,6 +25,16 @@ class APIService {
     await preferences.setString('access_token',token);
   }
 
+  Future setPersonID (String id) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.setString('_id',id);
+  }
+
+  Future<String?> getPersonID () async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString('_id');
+  }
+
   Future<List<dynamic>> getAll(String route) async {
     String? accessToken = await getAccessToken();
     print("$apiUrl/$route");
@@ -69,6 +79,15 @@ class APIService {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(decodedData['message'])));
         throw Exception(res.body);
     }
+  }
+
+  Future<dynamic> specialPostCase(BuildContext context,String route, Map<String,dynamic> data) async {
+    Map<String,String> headers = await getHeaders();
+    Response res = await http.post(Uri.parse("$apiUrl/$route"),
+        body: jsonEncode(data),
+        headers: headers
+    );
+
   }
 
   Future delete(BuildContext context,String route) async {

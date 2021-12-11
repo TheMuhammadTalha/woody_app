@@ -1,10 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:woody_app/Screens/const.dart';
-import 'package:http/http.dart' as http;
 import 'package:woody_app/Screens/vehicle_input_page.dart';
 import 'package:woody_app/api_models/login_model.dart';
 import 'package:woody_app/demo/api_service.dart';
@@ -13,8 +9,6 @@ import 'package:woody_app/widget/heading.dart';
 import 'package:woody_app/widget/logo_image.dart';
 import 'package:woody_app/widget/password_form_widget.dart';
 import 'package:woody_app/widget/text_form_widget.dart';
-
-import '../api_const_path/api_const.dart';
 import '../api_models/create_account_model.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -159,10 +153,10 @@ class _CreateAccountState extends State<CreateAccount> {
                                 ),
                               );
                             });
-                        await APIService().post(
+                        var person = await  APIService().post(
                             context,
                             'person',
-                            CreateAccountModel(
+                           CreateAccountModel(
                               username: email.text,
                               firstName: fName.text,
                               lastName: lName.text,
@@ -171,6 +165,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               phone: phone.text,
                               role: '0',
                             ).toJson());
+                        print(person);
 
                         var token = await APIService().post(
                             context,
@@ -179,9 +174,11 @@ class _CreateAccountState extends State<CreateAccount> {
                                     username: email.text,
                                     password: password.text)
                                 .toJson());
-                        print(token['access_token']);
+
                         await APIService()
                             .setAccessToken(token['access_token']);
+                        await APIService().setPersonID(person['_id']);
+
                         Navigator.pop(context);
                         Navigator.pop(context);
                             Navigator.of(context).push(MaterialPageRoute(
