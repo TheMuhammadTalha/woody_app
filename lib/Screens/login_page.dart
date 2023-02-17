@@ -23,8 +23,8 @@ class _LogInState extends State<LogIn> {
   var email = TextEditingController();
   var password = TextEditingController();
   var formKey = GlobalKey<FormState>();
-
-  AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
+AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
+  
 @override
   void initState() {
     super.initState();
